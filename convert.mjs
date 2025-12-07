@@ -2,7 +2,7 @@
 import fs from "node:fs/promises";
 
 const SOURCE_URL =
-  "https://raw.githubusercontent.com/666zmy/MoonTV/refs/heads/main/config.json";
+  "https://raw.githubusercontent.com/hafrey1/LunaTV-config/refs/heads/main/LunaTV-config.json";
 
 function isEnglish(str) {
   return /^[A-Za-z]/.test(str.trim());
