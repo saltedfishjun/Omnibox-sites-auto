@@ -1,43 +1,15 @@
-name: Update sites.json from MoonTV config
-
-permissions:
-  contents: write
-
-on:
-  schedule:
-    - cron: "10 4 * * *"    # 每天 04:10 UTC 自动跑一次
-  workflow_dispatch: {}      # 允许手动在 Actions 里点击运行
-
-jobs:
-  update:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Run converter
-        run: node convert.mjs
-
       - name: Commit and push if changed
         run: |
-          # 先配置 git 身份
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # 把 sites.json 加入暂存区（新文件也能被检测到）
-          git add sites.json
+          git add sitesFull.json
+          git add sitesLite.json
 
-          # 检查暂存区里有没有变化（包括新文件）
           if git diff --cached --quiet; then
-            echo "No changes in sites.json, nothing to commit."
+            echo "No changes, nothing to commit."
             exit 0
           fi
 
-          git commit -m "Update sites.json [skip ci]"
+          git commit -m "Update sitesFull & sitesLite [skip ci]"
           git push
