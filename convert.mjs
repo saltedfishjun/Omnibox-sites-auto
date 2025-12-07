@@ -1,15 +1,18 @@
 // convert.mjs
 import fs from "node:fs/promises";
 
-// MoonTV 原始配置地址
 const SOURCE_URL =
   "https://raw.githubusercontent.com/666zmy/MoonTV/refs/heads/main/config.json";
+
+function isEnglish(str) {
+  return /^[A-Za-z]/.test(str.trim());
+}
 
 async function main() {
   const res = await fetch(SOURCE_URL);
   if (!res.ok) {
     throw new Error(
-      `Failed to fetch source config: ${res.status} ${res.statusText}`,
+      `Failed to fetch source config: ${res.status} ${res.statusText}`
     );
   }
 
@@ -17,9 +20,6 @@ async function main() {
 
   const apiSite = raw.api_site || {};
 
-  // 1. 映射为目标结构
-  // 2. remark 统一置空
-  // 3. 最后按 name 排序（升序）
   const sites = Object.values(apiSite)
     .map((item) => ({
       id: "",
@@ -39,6 +39,20 @@ async function main() {
     .sort((a, b) => {
       const na = a.name || "";
       const nb = b.name || "";
+
+      const aEng = isEnglish(na);
+      const bEng = isEnglish(nb);
+
+      // 英文排中文前面
+      if (aEng && !bEng) return -1;
+      if (!aEng && bEng) return 1;
+
+      // 英文内部排序
+      if (aEng && bEng) {
+        return na.localeCompare(nb, "en", { sensitivity: "base" });
+      }
+
+      // 中文内部排序
       return na.localeCompare(nb, "zh-Hans-CN", { sensitivity: "base" });
     });
 
