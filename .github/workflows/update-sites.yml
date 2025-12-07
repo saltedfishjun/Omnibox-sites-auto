@@ -1,15 +1,42 @@
+name: Update sitesFull.json & sitesLite.json
+
+permissions:
+  contents: write   # 必须有写入权限
+
+on:
+  schedule:
+    - cron: "10 4 * * *"    # 每天 UTC 04:10 自动更新
+  workflow_dispatch: {}      # 允许手动触发
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run converter
+        run: node convert.mjs
+
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add sitesFull.json
-          git add sitesLite.json
+          # 添加两个输出文件
+          git add sitesFull.json sitesLite.json
 
+          # 若无变更就不提交
           if git diff --cached --quiet; then
-            echo "No changes, nothing to commit."
+            echo "No changes detected."
             exit 0
           fi
 
-          git commit -m "Update sitesFull & sitesLite [skip ci]"
+          git commit -m "Update sitesFull.json & sitesLite.json [skip ci]"
           git push
