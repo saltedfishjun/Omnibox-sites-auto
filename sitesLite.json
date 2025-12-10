@@ -32,6 +32,21 @@
     },
     {
       "id": "",
+      "key": "🎬艾旦影视",
+      "name": "🎬艾旦影视",
+      "api": "https://pz.v88.qzz.io/?url=https://lovedan.net/api.php/provide/vod",
+      "type": 2,
+      "isActive": 1,
+      "time": "",
+      "isDefault": 0,
+      "remark": "",
+      "tags": [],
+      "priority": 0,
+      "proxyMode": "none",
+      "customProxy": ""
+    },
+    {
+      "id": "",
       "key": "🎬百度云zy",
       "name": "🎬百度云zy",
       "api": "https://pz.168188.dpdns.org/?url=https://api.apibdzy.com/api.php/provide/vod",
